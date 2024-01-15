@@ -13,7 +13,11 @@ class EmailSender:
         msg['Subject'] = subject
         msg['From'] = sender_email
         msg['To'] = recipient
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
-            smtp_server.login(sender_email, sender_password)
-            smtp_server.sendmail(sender_email, recipient, msg.as_string())
-            print("Sent mesage")
+
+        try:
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+                smtp_server.login(sender_email, sender_password)
+                smtp_server.sendmail(sender_email, recipient, msg.as_string())
+                print("Sent mesage")
+        except:
+            print(f"Could not send message Sub: {subject} Body: \n {body}")
