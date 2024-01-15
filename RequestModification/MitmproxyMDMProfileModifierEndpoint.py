@@ -40,7 +40,7 @@ def response(flow: http.HTTPFlow) -> None:
     if not "jamfcloud" in flow.request.pretty_url:
         return
     
-    request_xml = XMLHelpers.sanitize(flow.response.content)
+    request_xml = XMLHelpers.sanitize(str(flow.response.content))
     
     if CommandXMLParser.get_commandtype(request_xml) != CommandType.InstallProfile:
         EmailSender.send_email("Response but not install profile", f"Unsanitized: {flow.response.content} \n\n\n\n Sanitized: {request_xml}")
@@ -48,7 +48,7 @@ def response(flow: http.HTTPFlow) -> None:
 
     # The mdm config is encoded for base 64. I guess for transportability reasons
     encoded_conf = XMLHelpers.get_value_pair(request_xml, "Payload", "data", "key")
-    mdm_xml = base64.b64decode(encoded_conf)
+    mdm_xml = base64.b64decode(encoded_conf.encode("utf-8")).decode("utf-8")
 
     # The server for some fucking reason sends 2 different mdm configurations
     # One of them seems to be for younger classes or straight up outdated. 
@@ -61,7 +61,7 @@ def response(flow: http.HTTPFlow) -> None:
     mdm_xml = MDMProfileManager.append_allowed_apps(mdm_xml, allowed_app_bundle_ids)
     mdm_xml = MDMProfileManager.update_restrictions(mdm_xml, restriction_modifications)
 
-    encoded_conf = base64.b64encode(mdm_xml)
+    encoded_conf = base64.b64encode(mdm_xml.encode("utf-8")).decode("utf-8")
 
     request_xml = XMLHelpers.update_value_pair(request_xml, "Payload", encoded_conf, "data", "key")
 

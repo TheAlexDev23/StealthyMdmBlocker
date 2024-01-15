@@ -23,9 +23,9 @@ class XMLHelpers:
     
 
     def update_value_pair(xml: str, key_name: str, new_value: str, value_tag = "value", key_tag = "key") -> str:
-        pattern = f"<{key_tag}>{key_name}<{key_tag}/>.*?<{value_tag}>(.*?)<{value_tag}/>"
+        pattern = f"<{key_tag}>{key_name}</{key_tag}>.*?<{value_tag}>(.*?)</{value_tag}>"
 
-        new_xml = re.sub(pattern, f"<{key_tag}>{key_name}<{key_tag}/> <{value_tag}>{new_value}<{value_tag}/>", xml, flags=re.DOTALL)
+        new_xml = re.sub(pattern, f"<{key_tag}>{key_name}</{key_tag}> <{value_tag}>{new_value}<{value_tag}/>", xml, flags=re.DOTALL)
 
         return new_xml
 
@@ -34,6 +34,6 @@ class XMLHelpers:
         pattern = f"<key>{key_name}</key>.*?<(true|false)/>"
 
         # Fuck python once again. Why the fuck do bools start with upper case
-        new_xml = re.sub(pattern, f"<key>{key_name}</key><{str(new_value).lower()} />", xml, flags=re.DOTALL)
+        new_xml = re.sub(pattern, f"<key>{key_name}</key><{str(new_value).lower()}/>", xml, flags=re.DOTALL)
 
         return new_xml

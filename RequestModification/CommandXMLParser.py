@@ -16,5 +16,5 @@ class CommandXMLParser:
             return CommandType.ListProfile
         elif stringType == "InstallProfile":
             return CommandType.InstallProfile
-        else
+        else:
             return CommandType.Other
