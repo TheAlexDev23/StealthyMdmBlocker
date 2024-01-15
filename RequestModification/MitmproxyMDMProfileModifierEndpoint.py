@@ -22,18 +22,18 @@ allowed_app_bundle_ids = [
 ]
 
 restriction_modifications = {
-    "AllowAppInstallation"         : "true",
-    "AllowAppRemoval"              : "true",
-    "AllowInAppPurchases"          : "true",
-    "AllowAssistant"               : "true",
-    "AllowAirDrop"                 : "true",
-    "AllowItunes"                  : "true",
-    "AllowSafari"                  : "true",
-    "ForceWifiPowerOn"             : "false",
-    "AllowVPNCreation"             : "true",
-    "AllowEraseContentAndSettings" : "true",
-    "AllowDeviceNameModification"  : "true",
-    "AllowUIAppInstallation"       : "true"
+    "allowAppInstallation"         : "true",
+    "allowAppRemoval"              : "true",
+    "allowInAppPurchases"          : "true",
+    "allowAssistant"               : "true",
+    "allowAirDrop"                 : "true",
+    "allowItunes"                  : "true",
+    "allowSafari"                  : "true",
+    "forceWifiPowerOn"             : "false",
+    "allowVPNCreation"             : "true",
+    "allowEraseContentAndSettings" : "true",
+    "allowDeviceNameModification"  : "true",
+    "allowUIAppInstallation"       : "true"
 }
 
 def response(flow: http.HTTPFlow) -> None:
