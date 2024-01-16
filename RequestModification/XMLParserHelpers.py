@@ -25,7 +25,7 @@ class XMLHelpers:
     def update_value_pair(xml: str, key_name: str, new_value: str, value_tag = "value", key_tag = "key") -> str:
         pattern = f"<{key_tag}>{key_name}</{key_tag}>.*?<{value_tag}>(.*?)</{value_tag}>"
 
-        new_xml = re.sub(pattern, f"<{key_tag}>{key_name}</{key_tag}> <{value_tag}>{new_value}<{value_tag}/>", xml, flags=re.DOTALL)
+        new_xml = re.sub(pattern, f"<{key_tag}>{key_name}</{key_tag}> <{value_tag}>{new_value}</{value_tag}>", xml, flags=re.DOTALL)
 
         return new_xml
 

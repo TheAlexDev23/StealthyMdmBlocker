@@ -8,7 +8,8 @@ class MDMProfileManager:
         current_allowed_apps = XMLHelpers.get_value_pair(xml, "allowListedAppBundleIDs", "array", "key")
         
         for app_bundle_id in allowed_apps:
-            current_allowed_apps += "\n" + f"<string>{app_bundle_id}</string>" + "\n"
+            if app_bundle_id not in current_allowed_apps:
+                current_allowed_apps += "\n" + f"<string>{app_bundle_id}</string>"
 
         xml = XMLHelpers.update_value_pair(xml, "allowListedAppBundleIDs", current_allowed_apps, "array", "key")
 
@@ -17,7 +18,7 @@ class MDMProfileManager:
 
     def update_restrictions(xml: str, restriction_modifications: dict) -> str:
         for key in restriction_modifications:
-            # im probably braindead, dont care if theres other way
+            # im probably braindead, dont care if theres another way
             boolean_value = False
             if restriction_modifications[key].lower() == "true":
                 boolean_value = True
