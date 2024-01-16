@@ -26,3 +26,13 @@ class MDMProfileManager:
             xml = XMLHelpers.update_boolean_property(xml, key, boolean_value)
 
         return xml
+    
+    def update_web_filters(xml: str) -> str:
+        xml = XMLHelpers.update_boolean_property(xml, "AutoFilterEnabled", False)
+        
+        # Idk if making the array empty will break shit, so i give it at least 2 elements just in case
+        # and nobody will suffer from these restrictions, because nobody uses bing and omegle is shut down
+        updated_list = "<string>https://www.bing.com</string>\n<string>https://www.omegle.com</string>"
+        xml = XMLHelpers.update_value_pair(xml, "DenyListURLs", updated_list, "array", "key")
+        
+        return xml
