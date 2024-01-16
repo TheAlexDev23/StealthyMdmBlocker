@@ -41,22 +41,18 @@ restriction_modifications = {
     "allowUIAppInstallation"       : "true"
 }
 
-# mitmproxy entry
-def response(flow: http.HTTPFlow) -> None:
-    if "jamfcloud" not in flow.request.pretty_url: return
+# Logging configuration
+use_email_logging = False
+verbose: bool = "-v" in sys.argv
 
-    request_xml = XMLHelpers.sanitize(flow.response.get_text())
-
-    command_type = CommandXMLParser.get_commandtype(request_xml)
-
-    # no switch statements because python is top-tier brain rot.
-    if command_type == CommandType.InstallProfile:
-        request_xml = patch_mdm_configuration(request_xml)
+def log(title: str, body: str) -> None:
+    if use_email_logging:
+        if verbose: EmailSender.send_email(title, body)
+        else: EmailSender.send_email(title, "")
     else:
-        log("Skipping command, unsuported type. ", f"Request xml:\n{request_xml}")
-    
-    flow.response.text = request_xml
-    
+        if verbose: print(f"{title}\n{body}")
+        else: print(f"{title}")
+
 
 def patch_mdm_configuration(request_xml: str) -> str:
     target_most_recent_version = False
@@ -86,14 +82,18 @@ def patch_mdm_configuration(request_xml: str) -> str:
 
     return request_xml
 
-# Logging configuration
-use_email_logging = False
-verbose: bool = "-v" in sys.argv
+# mitmproxy entry
+def response(flow: http.HTTPFlow) -> None:
+    if "jamfcloud" not in flow.request.pretty_url: return
 
-def log(title: str, body: str) -> None:
-    if use_email_logging:
-        if verbose: EmailSender.send_email(title, body)
-        else: EmailSender.send_email(title, "")
+    request_xml = XMLHelpers.sanitize(flow.response.get_text())
+
+    command_type = CommandXMLParser.get_commandtype(request_xml)
+
+    # no switch statements because python is top-tier brain rot.
+    if command_type == CommandType.InstallProfile:
+        request_xml = patch_mdm_configuration(request_xml)
     else:
-        if verbose: print(f"{title}\n{body}")
-        else: print(f"{title}")
+        log("Skipping command, unsuported type. ", f"Request xml:\n{request_xml}")
+    
+    flow.response.text = request_xml
