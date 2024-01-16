@@ -59,7 +59,7 @@ Restrictions, self explanatory. I've selected a few to allow/remove:
 - AllowDeviceNameModification
 - AllowUIAppInstallation
 
-Format (find first occurence of `<key>name</key>` and replace the closest `<true/>` or `<false/>` by its opposite): 
+Format: 
 
 ```xml
 <key>PayloadDisplayName</key>
@@ -69,6 +69,13 @@ Format (find first occurence of `<key>name</key>` and replace the closest `<true
 <key>allowCamera</key>
 <true/>
 ...
+```
+
+Removal time, can fuck around with this one too, as the completion time is allways at the end of the day.
+
+```xml
+<key>RemovalDate</key>
+<date>2024-01-15T15:30:00Z</date>
 ```
 
 ```xml
