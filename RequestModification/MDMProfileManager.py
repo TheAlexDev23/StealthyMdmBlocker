@@ -18,7 +18,7 @@ class MDMProfileManager:
 
     def update_restrictions(xml: str, restriction_modifications: dict) -> str:
         for key in restriction_modifications:
-            # im probably braindead, dont care if theres another way
+            # there's probably another way, but it wouldn't be an issue if python used true false instead of True False
             boolean_value = False
             if restriction_modifications[key].lower() == "true":
                 boolean_value = True
@@ -31,7 +31,7 @@ class MDMProfileManager:
         xml = XMLHelpers.update_boolean_property(xml, "AutoFilterEnabled", False)
         
         # Idk if making the array empty will break shit, so i give it at least 2 elements just in case
-        # and nobody will suffer from these restrictions, because nobody uses bing and omegle is shut down
+        # Nobody should suffer from these restrictions, because nobody uses bing and omegle is shut down
         updated_list = "<string>https://www.bing.com</string>\n<string>https://www.omegle.com</string>"
         xml = XMLHelpers.update_value_pair(xml, "DenyListURLs", updated_list, "array", "key")
         
