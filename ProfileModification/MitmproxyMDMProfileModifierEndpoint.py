@@ -7,7 +7,9 @@ import CommandXMLParser
 import XMLHelpers
 import MDMProfileManager
 
-from EmailSender import EmailSender
+sys.path.insert(0, "../Helpers")
+
+from Logger import Logger
 
 # retarded, I know, but I'm not sure there's a way to use a blacklist instead of whitelist, so I'm not risking a brick on my device.
 allowed_app_bundle_ids = [
@@ -45,20 +47,7 @@ restriction_modifications = {
 use_email_logging = False
 verbose: bool = "-v" in sys.argv
 
-email_sender = EmailSender()
-
-def log(title: str, body: str) -> None:    
-    if use_email_logging:
-        if verbose:
-            email_sender.send_email(title, body)
-        else:
-            email_sender.send_email(title, "")
-    else:
-        if verbose:
-            print(f"{title}\n{body}")
-        else:
-            print(f"{title}")
-
+logger = Logger()
 
 def patch_mdm_configuration(request_xml: str) -> str:
     target_most_recent_version = False
@@ -72,7 +61,7 @@ def patch_mdm_configuration(request_xml: str) -> str:
     # This is a hardcoded check since the mdm provider has no fucking versioning rules and the one that seems to be the active has 23 in its display name.
     # However it doesn't really matter as i dont really know which profile is used so patching both should not cause any damage.
     if target_most_recent_version and "23" not in MDMProfileManager.get_version(mdm_xml):
-        log("Will not apply patch. Not most recent version.", f"Decrypted mdm config:\n{mdm_xml}\n\Whole response:\n{request_xml}")
+        logger.log("Will not apply patch. Not most recent version.", f"Decrypted mdm config:\n{mdm_xml}\n\Whole response:\n{request_xml}")
         return
     
     # Fuck python honestly. Why isn't a string a reference type? 
@@ -84,7 +73,7 @@ def patch_mdm_configuration(request_xml: str) -> str:
 
     request_xml = XMLHelpers.update_value_pair(request_xml, "Payload", encoded_conf, "data", "key")
 
-    log("Mdm Patch Applied", f"MDM config:\n{mdm_xml}\nWhole response:\n{request_xml}")
+    logger.log("Mdm Patch Applied", f"MDM config:\n{mdm_xml}\nWhole response:\n{request_xml}")
 
     return request_xml
 
@@ -102,8 +91,8 @@ def response(flow: http.HTTPFlow) -> None:
     if command_type == CommandXMLParser.CommandType.InstallProfile:
         request_xml = patch_mdm_configuration(request_xml)
     else:
-        log("Skipping command, unsuported type. ", f"Request xml:\n{request_xml}")
-  
+        logger.log("Skipping command, unsuported type. ", f"Request xml:\n{request_xml}")
+
     flow.response.text = request_xml
 
 
@@ -114,4 +103,4 @@ def request(flow: http.HTTPFlow) -> None:
 
     request_xml = XMLHelpers.sanitize(flow.response.get_text())
 
-    log("Request", f"{request_xml}")
+    logger.log("Request", f"{request_xml}")
