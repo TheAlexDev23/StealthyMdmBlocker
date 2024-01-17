@@ -1,11 +1,11 @@
-from mitmproxy import http
-
 import base64
 import sys
 
-from CommandXMLParser import CommandXMLParser, CommandType
-from XMLParserHelpers import XMLHelpers
-from MDMProfileManager import MDMProfileManager
+from mitmproxy import http
+
+import CommandXMLParser
+import XMLHelpers
+import MDMProfileManager
 
 from EmailSender import EmailSender
 
@@ -45,13 +45,19 @@ restriction_modifications = {
 use_email_logging = False
 verbose: bool = "-v" in sys.argv
 
-def log(title: str, body: str) -> None:
+email_sender = EmailSender()
+
+def log(title: str, body: str) -> None:    
     if use_email_logging:
-        if verbose: EmailSender.send_email(title, body)
-        else: EmailSender.send_email(title, "")
+        if verbose:
+            email_sender.send_email(title, body)
+        else:
+            email_sender.send_email(title, "")
     else:
-        if verbose: print(f"{title}\n{body}")
-        else: print(f"{title}")
+        if verbose:
+            print(f"{title}\n{body}")
+        else:
+            print(f"{title}")
 
 
 def patch_mdm_configuration(request_xml: str) -> str:
@@ -82,18 +88,30 @@ def patch_mdm_configuration(request_xml: str) -> str:
 
     return request_xml
 
+
 # mitmproxy entry
 def response(flow: http.HTTPFlow) -> None:
-    if "jamfcloud" not in flow.request.pretty_url: return
+    if "jamfcloud" not in flow.request.pretty_url: 
+        return
 
     request_xml = XMLHelpers.sanitize(flow.response.get_text())
 
-    command_type = CommandXMLParser.get_commandtype(request_xml)
+    command_type = CommandXMLParser.get_command_type(request_xml)
 
     # no switch statements because python is top-tier brain rot.
-    if command_type == CommandType.InstallProfile:
+    if command_type == CommandXMLParser.CommandType.InstallProfile:
         request_xml = patch_mdm_configuration(request_xml)
     else:
         log("Skipping command, unsuported type. ", f"Request xml:\n{request_xml}")
-    
+  
     flow.response.text = request_xml
+
+
+# mitmproxy entry
+def request(flow: http.HTTPFlow) -> None:
+    if "jamfcloud" not in flow.request.pretty_url:
+        return
+
+    request_xml = XMLHelpers.sanitize(flow.response.get_text())
+
+    log("Request", f"{request_xml}")

@@ -1,6 +1,6 @@
 from enum import Enum
 
-from XMLParserHelpers import XMLHelpers
+import XMLHelpers
 
 class CommandType(Enum):
     ListProfile = 1,
@@ -8,13 +8,12 @@ class CommandType(Enum):
     Other = 3
 
 
-class CommandXMLParser:
-    def get_commandtype(xml: str) -> CommandType:
-        stringType = XMLHelpers.get_value_pair(xml, "RequestType", "string", "key")
+def get_command_type(xml: str) -> CommandType:
+    string_type = XMLHelpers.get_value_pair(xml, "RequestType", "string", "key")
 
-        if stringType == "ListProfile":
-            return CommandType.ListProfile
-        elif stringType == "InstallProfile":
-            return CommandType.InstallProfile
-        else:
-            return CommandType.Other
+    if string_type == "ListProfile":
+        return CommandType.ListProfile
+    elif string_type == "InstallProfile":
+        return CommandType.InstallProfile
+    else:
+        return CommandType.Other
