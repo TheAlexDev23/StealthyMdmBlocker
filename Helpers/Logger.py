@@ -5,7 +5,7 @@ from EmailSender import EmailSender
 
 class Logger:
     def __init__(self):
-        self._use_email = True
+        self._use_email = False
         self._verbose = True
 
         self._sender_email = environ.get("MDM_MITMPROXY_NOTIFIER_EMAIL_SEND")
@@ -16,9 +16,6 @@ class Logger:
             self._email_sender = EmailSender()
 
     def log(self, title: str, body: str):
-        # temporary, remove
-        print(f"{title}\n{body}")
-
         if not self._verbose:
             body = ""
 
@@ -26,4 +23,3 @@ class Logger:
             self._email_sender.send_email(title, body)
         else:
             print(f"{title}\n{body}")
-

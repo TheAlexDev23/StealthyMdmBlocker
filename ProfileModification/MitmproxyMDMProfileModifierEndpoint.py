@@ -41,6 +41,8 @@ restriction_modifications = {
 
 logger = Logger()
 
+EXPERIMENTAL_REMOVE_APP_WHITELIST = True
+
 
 def patch_mdm_configuration(request_xml: str) -> str:
     target_most_recent_version = False
@@ -63,8 +65,12 @@ def patch_mdm_configuration(request_xml: str) -> str:
 
         return request_xml
 
-    # Fuck python honestly. Why isn't a string a reference type?
-    mdm_xml = MDMProfileManager.append_allowed_apps(mdm_xml, allowed_app_bundle_ids)
+    if EXPERIMENTAL_REMOVE_APP_WHITELIST:
+        mdm_xml = MDMProfileManager.remove_allowed_apps(mdm_xml)
+    else:
+        mdm_xml = MDMProfileManager.append_allowed_apps(mdm_xml, allowed_app_bundle_ids)
+
+    # Why the fuck a string isn't a reference type?
     mdm_xml = MDMProfileManager.update_restrictions(mdm_xml, restriction_modifications)
     mdm_xml = MDMProfileManager.update_web_filters(mdm_xml)
 

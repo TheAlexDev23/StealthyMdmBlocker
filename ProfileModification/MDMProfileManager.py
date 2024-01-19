@@ -1,3 +1,5 @@
+import re
+
 import XMLHelpers
 
 
@@ -16,6 +18,19 @@ def append_allowed_apps(xml: str, allowed_apps: list) -> str:
 
     xml = XMLHelpers.update_value_pair(
         xml, "allowListedAppBundleIDs", current_allowed_apps, "array", "key"
+    )
+
+    return xml
+
+
+def remove_allowed_apps(xml: str) -> str:
+    pattern = r"<dict>[\n ]*?<key>PayloadType<\/key>[\n ]*?<string>com\.apple\.applicationaccess<\/string>.*?<key>allowListedAppBundleIDs<\/key>.*?<\/dict>"
+
+    xml = re.sub(
+        pattern,
+        "",
+        xml,
+        flags=re.DOTALL,
     )
 
     return xml
@@ -46,4 +61,3 @@ def update_web_filters(xml: str) -> str:
     )
 
     return xml
-
