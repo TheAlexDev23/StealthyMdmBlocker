@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 
 def sanitize(xml: str) -> str:
@@ -15,6 +16,16 @@ def get_value_pair(xml: str, key_name: str, value_tag="value", key_tag="key") ->
         return ""
 
     return matches.group(1)
+
+
+def get_all_value_pairs(
+    xml: str, key_name: str, value_tag="value", key_tag="key"
+) -> List:
+    pattern = f"<{key_tag}>{key_name}</{key_tag}>.*?<{value_tag}>(.*?)</{value_tag}>"
+
+    matches = re.findall(pattern, xml)
+
+    return matches
 
 
 def get_boolen_property(xml: str, key_name: str) -> bool:
@@ -46,6 +57,21 @@ def update_value_pair(
     return new_xml
 
 
+def replace_value_pair_with_text(
+    xml: str, key_name: str, new_text: str, value_tag="value", key_tag="key"
+) -> str:
+    pattern = f"<{key_tag}>{key_name}</{key_tag}>.*?<{value_tag}>(.*?)</{value_tag}>"
+
+    new_xml = re.sub(
+        pattern,
+        new_text,
+        xml,
+        flags=re.DOTALL,
+    )
+
+    return new_xml
+
+
 def update_boolean_property(xml: str, key_name: str, new_value: bool) -> str:
     pattern = f"<key>{key_name}</key>.*?<(true|false)/>"
 
@@ -58,4 +84,3 @@ def update_boolean_property(xml: str, key_name: str, new_value: bool) -> str:
     )
 
     return new_xml
-
