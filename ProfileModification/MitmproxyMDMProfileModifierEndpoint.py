@@ -10,6 +10,11 @@ from Logger import Logger
 import Config
 
 allowed_app_bundle_ids = [
+    # Native apps
+    "com.apple.AppStore",
+    "com.apple.weather",
+    "com.apple.VoiceMemos",
+    "com.apple.shortcuts",
     # Social medias
     "com.burbn.instagram",
     "com.atebits.Tweetie2",
