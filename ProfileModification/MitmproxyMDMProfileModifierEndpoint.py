@@ -7,6 +7,7 @@ import XMLHelpers
 import MDMProfileManager
 
 from Logger import Logger
+import Config
 
 # retarded, I know, but I'm not sure there's a way to use a blacklist instead of whitelist, so I'm not risking a brick on my device.
 allowed_app_bundle_ids = [
@@ -41,12 +42,8 @@ restriction_modifications = {
 
 logger = Logger()
 
-EXPERIMENTAL_REMOVE_APP_WHITELIST = True
-
 
 def patch_mdm_configuration(request_xml: str) -> str:
-    target_most_recent_version = False
-
     # The mdm config is encoded for base 64. I guess for transportability reasons.
     encoded_conf = XMLHelpers.get_value_pair(request_xml, "Payload", "data", "key")
     mdm_xml = base64.b64decode(encoded_conf.encode("utf-8")).decode("utf-8")
@@ -55,8 +52,9 @@ def patch_mdm_configuration(request_xml: str) -> str:
     # One of them seems to be for younger classes or straight up outdated.
     # This is a hardcoded check since the mdm provider has no fucking versioning rules and the one that seems to be the active has 23 in its display name.
     # However it doesn't really matter as i dont really know which profile is used so patching both should not cause any damage.
-    if target_most_recent_version and "23" not in MDMProfileManager.get_version(
-        mdm_xml
+    if (
+        "23" not in MDMProfileManager.get_version(mdm_xml)
+        and Config.instance.PATCHING_MATCH_LATEST_VER
     ):
         logger.log(
             "Will not apply patch. Not most recent version.",
@@ -65,7 +63,7 @@ def patch_mdm_configuration(request_xml: str) -> str:
 
         return request_xml
 
-    if EXPERIMENTAL_REMOVE_APP_WHITELIST:
+    if Config.instance.PATCHING_EXPERIMENTAL_REMOVE_ALLOWED_APPS:
         mdm_xml = MDMProfileManager.remove_allowed_apps(mdm_xml)
     else:
         mdm_xml = MDMProfileManager.append_allowed_apps(mdm_xml, allowed_app_bundle_ids)

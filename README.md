@@ -10,8 +10,14 @@ It's written in python because mitmproxy (my MITM proxy of choice) only has requ
 
 For functional execution append the directory of [helpers](./Helpers/) to the PYTHONPATH env variable
 
-Email logging (if enabled)
+Configuration should be located in `/etc/SMB/config.json` with email logging options strictly environment variables
 
-*MDM_MITMPROXY_NOTIFIER_EMAIL_SEND* -> Sender Email
-*MDM_MITMPROXY_NOTIFIER_EMAIL_SEND_PSWD* -> Sender Password
-*MDM_MITMPROXY_NOTIFIER_EMAIL_RECEIVE* -> Receiver Email
+Environment variables:
+
+Email logging (if enabled in `config.json`)
+
+*SMB_LOGGING_EMAIL* -> Sender email
+
+*SMB_LOGGING_EMAIL_PASSWORD* -> Sender email password
+
+*SMB_LOGGING_EMAIL_TARGET* -> Receiver of emails
