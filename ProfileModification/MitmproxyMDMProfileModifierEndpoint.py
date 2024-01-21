@@ -9,17 +9,35 @@ import MDMProfileManager
 from Logger import Logger
 import Config
 
-# retarded, I know, but I'm not sure there's a way to use a blacklist instead of whitelist, so I'm not risking a brick on my device.
 allowed_app_bundle_ids = [
-    "com.google.ios.youtube",
-    "com.supercell.laser",
-    "com.microblink.PhotoMath",
-    "com.activision.callofduty.shooter",
-    "ch.protonmail.vpn",
+    # Social medias
     "com.burbn.instagram",
     "com.atebits.Tweetie2",
+    "com.reddit.Reddit",
+    # Communication
+    "com.hammerandchisel.discord",
+    "ph.telegra.Telegraph",
+    # Entretainment
+    "com.google.ios.youtube",
+    "tv.twitch",
+    "com.spotify.client",
+    # Videogames
+    "com.valvesoftware.Steam",
+    "com.activision.callofduty.shooter",
+    "com.supercell.laser",
+    "io.blueflower.theotown.aios",
+    "com.bearbit.srw2",
+    # Tools
+    "md.obsidian",
+    "com.microblink.PhotoMath",
+    "com.fogcreek.trello",
+    # Proton
+    "ch.protonmail.vpn",
     "ch.protonmail.protonmail",
     "ch.protonmail.drive",
+    # Programming / Computer Science
+    "com.crystalnix.ServerAuditor",  # This is Termius, an ssh client
+    "com.github.stormbreaker.prod",
 ]
 
 restriction_modifications = {
