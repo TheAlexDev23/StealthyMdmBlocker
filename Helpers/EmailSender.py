@@ -1,16 +1,12 @@
-from os import environ
-
 import smtplib
 from email.mime.text import MIMEText
 
-import Config
-
 
 class EmailSender:
-    def __init__(self):
-        self._sender = Config.instance.LOGGING_EMAIL
-        self._password = Config.instance.LOGGING_EMAIL_PASSWORD
-        self._recipient = Config.instance.LOGGING_EMAIL_TARGET
+    def __init__(self, sender: str, password: str, recipient: str):
+        self._sender = sender
+        self._password = password
+        self._recipient = recipient
 
     def send_email(self, subject, body):
         sender = self._sender

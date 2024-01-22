@@ -49,7 +49,7 @@ class Config:
             self.LOGGING_EMAIL_TARGET, "SMB_LOGGING_EMAIL_TARGET"
         )
 
-    def _env_get(self, value: str, key: str) -> str:
+    def _env_get(self, value: str | None, key: str) -> str | None:
         environ_value = environ.get(key)
         if environ_value is None:
             return value
