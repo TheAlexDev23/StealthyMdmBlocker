@@ -33,6 +33,7 @@ allowed_app_bundle_ids = [
     "io.blueflower.theotown.aios",
     "com.bearbit.srw2",
     # Tools
+    "com.8bit.bitwarden",
     "md.obsidian",
     "com.microblink.PhotoMath",
     "com.fogcreek.trello",
