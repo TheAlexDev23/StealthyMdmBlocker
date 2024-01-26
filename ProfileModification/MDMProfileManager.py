@@ -23,19 +23,6 @@ def append_allowed_apps(xml: str, allowed_apps: list) -> str:
     return xml
 
 
-def remove_allowed_apps(xml: str) -> str:
-    pattern = r"<dict>[\n ]*?<key>PayloadType<\/key>[\n ]*?<string>com\.apple\.applicationaccess<\/string>.*?<key>allowListedAppBundleIDs<\/key>.*?<\/dict>"
-
-    xml = re.sub(
-        pattern,
-        "",
-        xml,
-        flags=re.DOTALL,
-    )
-
-    return xml
-
-
 def update_restrictions(xml: str, restriction_modifications: dict) -> str:
     for key in restriction_modifications:
         # there's probably another way, but it wouldn't be an issue if python used true false instead of True False
@@ -44,6 +31,22 @@ def update_restrictions(xml: str, restriction_modifications: dict) -> str:
             boolean_value = True
 
         xml = XMLHelpers.update_boolean_property(xml, key, boolean_value)
+
+    return xml
+
+
+def remove_allowed_apps(xml: str) -> str:
+    pattern = r"<dict>[\n ]*?<key>PayloadType<\/key>[\n ]*?<string>com\.apple\.applicationaccess<\/string>.*?<key>allowListedAppBundleIDs<\/key>.*?<\/dict>"
+
+    xml = re.sub(pattern, "", xml, flags=re.DOTALL)
+
+    return xml
+
+
+def remove_restrictions(xml: str) -> str:
+    pattern = r"<dict>[\n ]*?<key>PayloadType<\/key>[\n ]*?<string>com\.apple\.applicationaccess<\/string>(?!.*?allowListedAppBundleIDs.*?).*?<string>Restrictions<\/string>.*?<\/dict>"
+
+    xml = re.sub(pattern, "", xml, flags=re.DOTALL)
 
     return xml
 

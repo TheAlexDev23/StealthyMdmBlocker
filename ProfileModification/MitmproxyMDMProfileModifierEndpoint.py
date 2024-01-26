@@ -87,13 +87,20 @@ def patch_mdm_configuration(request_xml: str) -> str:
 
         return request_xml
 
+    # Why the fuck a string isn't a reference type?
+
     if Config.instance.PATCHING_REMOVE_ALLOWED_APPS:
         mdm_xml = MDMProfileManager.remove_allowed_apps(mdm_xml)
     else:
         mdm_xml = MDMProfileManager.append_allowed_apps(mdm_xml, allowed_app_bundle_ids)
 
-    # Why the fuck a string isn't a reference type?
-    mdm_xml = MDMProfileManager.update_restrictions(mdm_xml, restriction_modifications)
+    if Config.instance.PATCHING_EXPERIMENTAL_REMOVE_APPRESTRICTIONS:
+        mdm_xml = MDMProfileManager.remove_restrictions(mdm_xml)
+    else:
+        mdm_xml = MDMProfileManager.update_restrictions(
+            mdm_xml, restriction_modifications
+        )
+
     mdm_xml = MDMProfileManager.update_web_filters(mdm_xml)
 
     encoded_conf = base64.b64encode(mdm_xml.encode("utf-8")).decode("utf-8")
