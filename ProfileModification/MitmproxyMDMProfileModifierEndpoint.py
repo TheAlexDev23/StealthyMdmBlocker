@@ -87,7 +87,7 @@ def patch_mdm_configuration(request_xml: str) -> str:
 
         return request_xml
 
-    if Config.instance.PATCHING_EXPERIMENTAL_REMOVE_ALLOWED_APPS:
+    if Config.instance.PATCHING_REMOVE_ALLOWED_APPS:
         mdm_xml = MDMProfileManager.remove_allowed_apps(mdm_xml)
     else:
         mdm_xml = MDMProfileManager.append_allowed_apps(mdm_xml, allowed_app_bundle_ids)

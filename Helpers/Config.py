@@ -18,7 +18,7 @@ class Config:
         self.LOGGING_EMAIL_TARGET = None
 
         self.PATCHING_MATCH_LATEST_VER = False
-        self.PATCHING_EXPERIMENTAL_REMOVE_ALLOWED_APPS = False
+        self.PATCHING_REMOVE_ALLOWED_APPS = False
 
     def _load_from_json(self):
         if not exists("/etc/SMB/config.json"):
@@ -36,9 +36,7 @@ class Config:
         patching = data["patching"]
 
         self.PATCHING_MATCH_LATEST_VER = patching["match_latest_version"] == "1"
-        self.PATCHING_EXPERIMENTAL_REMOVE_ALLOWED_APPS = (
-            patching["experimental"]["remove_allowed_apps"] == "1"
-        )
+        self.PATCHING_REMOVE_ALLOWED_APPS = patching["remove_allowed_apps"] == "1"
 
     def _load_from_environment(self):
         self.LOGGING_EMAIL = self._env_get(self.LOGGING_EMAIL, "SMB_LOGGING_EMAIL")
