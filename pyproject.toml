@@ -10,4 +10,5 @@ pythonPlatform = "Linux"
 executionEnvironments = [
   { root = "./ReverseEngineering/", pythonVersion = "3.11", extraPaths = [ "./Helpers/", "~/.local/share/pipx/venvs/mitmproxy/" ] },
   { root = "./ProfileModification/", pythonVersion = "3.11", extraPaths = [ "./Helpers/", "~/.local/share/pipx/venvs/mitmproxy/" ] },
+  { root = "./Tests/", pythonVersion = "3.11", extraPaths = [ "./Helpers/", "./ProfileModification/" ] },
 ]

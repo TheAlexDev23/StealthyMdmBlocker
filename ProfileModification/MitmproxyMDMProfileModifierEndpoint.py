@@ -9,61 +9,6 @@ import MDMProfileManager
 from Logger import Logger
 import Config
 
-allowed_app_bundle_ids = [
-    # Native apps
-    "com.apple.AppStore",
-    "com.apple.weather",
-    "com.apple.VoiceMemos",
-    "com.apple.shortcuts",
-    # Social medias
-    "com.burbn.instagram",
-    "com.atebits.Tweetie2",
-    "com.reddit.Reddit",
-    # Communication
-    "com.hammerandchisel.discord",
-    "ph.telegra.Telegraph",
-    # Entretainment
-    "com.google.ios.youtube",
-    "tv.twitch",
-    "com.spotify.client",
-    # Videogames
-    "com.valvesoftware.Steam",
-    "com.activision.callofduty.shooter",
-    "com.supercell.laser",
-    "io.blueflower.theotown.aios",
-    "com.bearbit.srw2",
-    # Tools
-    "com.8bit.bitwarden",
-    "md.obsidian",
-    "com.microblink.PhotoMath",
-    "com.fogcreek.trello",
-    # Proton
-    "ch.protonmail.vpn",
-    "ch.protonmail.protonmail",
-    "ch.protonmail.drive",
-    # Programming / Computer Science
-    "com.crystalnix.ServerAuditor",  # This is Termius, an ssh client
-    "com.github.stormbreaker.prod",
-]
-
-restriction_modifications = {
-    # This one is not found in the restrictions category but due to the way the parser works it'll be fine.
-    "PayloadRemovalDisallowed": "false",
-    # restrictions category
-    "allowAppInstallation": "true",
-    "allowAppRemoval": "true",
-    "allowInAppPurchases": "true",
-    "allowAssistant": "true",
-    "allowAirDrop": "true",
-    "allowItunes": "true",
-    "allowSafari": "true",
-    "forceWifiPowerOn": "false",
-    "allowVPNCreation": "true",
-    "allowEraseContentAndSettings": "true",
-    "allowDeviceNameModification": "true",
-    "allowUIAppInstallation": "true",
-}
-
 logger = Logger()
 
 
@@ -77,8 +22,8 @@ def patch_mdm_configuration(request_xml: str) -> str:
     # This is a hardcoded check since the mdm provider has no fucking versioning rules and the one that seems to be the active has 23 in its display name.
     # However it doesn't really matter as i dont really know which profile is used so patching both should not cause any damage.
     if (
-        "23" not in MDMProfileManager.get_version(mdm_xml)
-        and Config.instance.PATCHING_MATCH_LATEST_VER
+        Config.instance.PATCHING_MATCH_LATEST_VER
+        and not MDMProfileManager.version_is_latest(mdm_xml)
     ):
         logger.log(
             "Will not apply patch. Not most recent version.",
@@ -92,13 +37,15 @@ def patch_mdm_configuration(request_xml: str) -> str:
     if Config.instance.PATCHING_REMOVE_ALLOWED_APPS:
         mdm_xml = MDMProfileManager.remove_allowed_apps(mdm_xml)
     else:
-        mdm_xml = MDMProfileManager.append_allowed_apps(mdm_xml, allowed_app_bundle_ids)
+        mdm_xml = MDMProfileManager.append_allowed_apps(
+            mdm_xml, Config.instance.allowed_app_bundle_ids
+        )
 
     if Config.instance.PATCHING_EXPERIMENTAL_REMOVE_APPRESTRICTIONS:
         mdm_xml = MDMProfileManager.remove_restrictions(mdm_xml)
     else:
         mdm_xml = MDMProfileManager.update_restrictions(
-            mdm_xml, restriction_modifications
+            mdm_xml, Config.instance.restriction_modifications
         )
 
     mdm_xml = MDMProfileManager.update_web_filters(mdm_xml)

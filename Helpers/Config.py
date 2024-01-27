@@ -5,6 +5,61 @@ import json
 
 
 class Config:
+    allowed_app_bundle_ids = [
+        # Native apps
+        "com.apple.AppStore",
+        "com.apple.weather",
+        "com.apple.VoiceMemos",
+        "com.apple.shortcuts",
+        # Social medias
+        "com.burbn.instagram",
+        "com.atebits.Tweetie2",
+        "com.reddit.Reddit",
+        # Communication
+        "com.hammerandchisel.discord",
+        "ph.telegra.Telegraph",
+        # Entretainment
+        "com.google.ios.youtube",
+        "tv.twitch",
+        "com.spotify.client",
+        # Videogames
+        "com.valvesoftware.Steam",
+        "com.activision.callofduty.shooter",
+        "com.supercell.laser",
+        "io.blueflower.theotown.aios",
+        "com.bearbit.srw2",
+        # Tools
+        "com.8bit.bitwarden",
+        "md.obsidian",
+        "com.microblink.PhotoMath",
+        "com.fogcreek.trello",
+        # Proton
+        "ch.protonmail.vpn",
+        "ch.protonmail.protonmail",
+        "ch.protonmail.drive",
+        # Programming / Computer Science
+        "com.crystalnix.ServerAuditor",  # This is Termius, an ssh client
+        "com.github.stormbreaker.prod",
+    ]
+
+    restriction_modifications = {
+        # This one is not found in the restrictions category but due to the way the parser works it'll be fine.
+        "PayloadRemovalDisallowed": "false",
+        # restrictions category
+        "allowAppInstallation": "true",
+        "allowAppRemoval": "true",
+        "allowInAppPurchases": "true",
+        "allowAssistant": "true",
+        "allowAirDrop": "true",
+        "allowItunes": "true",
+        "allowSafari": "true",
+        "forceWifiPowerOn": "false",
+        "allowVPNCreation": "true",
+        "allowEraseContentAndSettings": "true",
+        "allowDeviceNameModification": "true",
+        "allowUIAppInstallation": "true",
+    }
+
     def __init__(self):
         self._set_defaults()
         self._load_from_json()

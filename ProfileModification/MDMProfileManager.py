@@ -3,6 +3,10 @@ import re
 import XMLHelpers
 
 
+def version_is_latest(xml: str) -> bool:
+    return "23" in xml
+
+
 def get_version(xml: str) -> str:
     return XMLHelpers.get_value_pair(xml, "PayloadDisplayName", "string", "key")
 
