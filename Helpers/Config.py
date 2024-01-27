@@ -43,7 +43,8 @@ class Config:
     ]
 
     restriction_modifications = {
-        # This one is not found in the restrictions category but due to the way the parser works it'll be fine.
+        # This one is not found in the restrictions category
+        # but due to the way the parser works it'll be fine.
         "PayloadRemovalDisallowed": "false",
         # restrictions category
         "allowAppInstallation": "true",

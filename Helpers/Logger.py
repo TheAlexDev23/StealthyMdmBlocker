@@ -14,7 +14,8 @@ class Logger:
 
             if sender_email is None or sender_password is None or recipient is None:
                 raise ValueError(
-                    "Incorrect configuration. Configured email logging without email information."
+                    "Incorrect configuration. "
+                    + "Configured email logging without email information."
                 )
 
             self._email_sender = EmailSender(sender_email, sender_password, recipient)

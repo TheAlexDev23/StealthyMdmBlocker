@@ -26,5 +26,5 @@ class EmailSender:
                 smtp_server.login(sender, password)
                 smtp_server.sendmail(sender, recipient, msg.as_string())
                 print("Sent mesage")
-        except:
+        except smtplib.SMTPException:
             print(f"Could not send message Sub: {subject} Body: \n {body}")

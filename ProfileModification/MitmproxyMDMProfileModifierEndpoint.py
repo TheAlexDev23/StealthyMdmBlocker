@@ -17,10 +17,6 @@ def patch_mdm_configuration(request_xml: str) -> str:
     encoded_conf = XMLHelpers.get_value_pair(request_xml, "Payload", "data", "key")
     mdm_xml = base64.b64decode(encoded_conf.encode("utf-8")).decode("utf-8")
 
-    # The server for some fucking reason sends 2 different mdm configurations.
-    # One of them seems to be for younger classes or straight up outdated.
-    # This is a hardcoded check since the mdm provider has no fucking versioning rules and the one that seems to be the active has 23 in its display name.
-    # However it doesn't really matter as i dont really know which profile is used so patching both should not cause any damage.
     if (
         Config.instance.PATCHING_MATCH_LATEST_VER
         and not MDMProfileManager.version_is_latest(mdm_xml)

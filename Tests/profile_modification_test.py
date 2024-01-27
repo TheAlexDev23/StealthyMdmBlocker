@@ -1,5 +1,3 @@
-import pytest
-
 import test_helpers
 
 import sys
@@ -8,7 +6,7 @@ sys.path.append(test_helpers.get_profile_modification_path())
 # MDMProfileManager imports XMLHelpers and other helpers
 sys.path.append(test_helpers.get_helpers_path())
 
-import MDMProfileManager
+import MDMProfileManager  # noqa: E402 needs path to be imported
 
 TEST_FILES_DIR = "./test_files/mdm_profiles/"
 

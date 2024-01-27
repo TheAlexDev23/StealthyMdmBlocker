@@ -4,8 +4,8 @@ import XMLHelpers
 
 
 class CommandType(Enum):
-    ListProfile = (1,)
-    InstallProfile = (2,)
+    ListProfile = 1
+    InstallProfile = 2
     Other = 3
 
 
@@ -18,4 +18,3 @@ def get_command_type(xml: str) -> CommandType:
         return CommandType.InstallProfile
     else:
         return CommandType.Other
-

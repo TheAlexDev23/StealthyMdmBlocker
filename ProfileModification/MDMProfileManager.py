@@ -29,7 +29,8 @@ def append_allowed_apps(xml: str, allowed_apps: list) -> str:
 
 def update_restrictions(xml: str, restriction_modifications: dict) -> str:
     for key in restriction_modifications:
-        # there's probably another way, but it wouldn't be an issue if python used true false instead of True False
+        # there's probably another way, but it wouldn't be an issue
+        # if python used true false instead of True False
         boolean_value = False
         if restriction_modifications[key].lower() == "true":
             boolean_value = True
@@ -40,7 +41,7 @@ def update_restrictions(xml: str, restriction_modifications: dict) -> str:
 
 
 def remove_allowed_apps(xml: str) -> str:
-    pattern = r"<dict>[\n ]*?<key>PayloadType<\/key>[\n ]*?<string>com\.apple\.applicationaccess<\/string>.*?<key>allowListedAppBundleIDs<\/key>.*?<\/dict>"
+    pattern = r"<dict>[\n ]*?<key>PayloadType<\/key>[\n ]*?<string>com\.apple\.applicationaccess<\/string>.*?<key>allowListedAppBundleIDs<\/key>.*?<\/dict>"  # noqa E501
 
     xml = re.sub(pattern, "", xml, flags=re.DOTALL)
 
@@ -48,7 +49,7 @@ def remove_allowed_apps(xml: str) -> str:
 
 
 def remove_restrictions(xml: str) -> str:
-    pattern = r"<dict>[\n ]*?<key>PayloadType<\/key>[\n ]*?<string>com\.apple\.applicationaccess<\/string>(?!.*?allowListedAppBundleIDs.*?).*?<string>Restrictions<\/string>.*?<\/dict>"
+    pattern = r"<dict>[\n ]*?<key>PayloadType<\/key>[\n ]*?<string>com\.apple\.applicationaccess<\/string>(?!.*?allowListedAppBundleIDs.*?).*?<string>Restrictions<\/string>.*?<\/dict>"  # noqa E501
 
     xml = re.sub(pattern, "", xml, flags=re.DOTALL)
 
@@ -58,8 +59,10 @@ def remove_restrictions(xml: str) -> str:
 def update_web_filters(xml: str) -> str:
     xml = XMLHelpers.update_boolean_property(xml, "AutoFilterEnabled", False)
 
-    # Idk if making the array empty will break shit, so i give it at least 2 elements just in case
-    # Nobody should suffer from these restrictions, because nobody uses bing and omegle is shut down
+    # Idk if making the array empty will break shit,
+    # so i give it at least 2 elements just in case
+    # Nobody should suffer from these restrictions,
+    # because nobody uses bing and omegle is shut down
     updated_list = (
         "<string>https://www.bing.com</string>\n<string>https://www.omegle.com</string>"
     )
