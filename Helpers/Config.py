@@ -47,6 +47,8 @@ class Config:
         # but due to the way the parser works it'll be fine.
         "PayloadRemovalDisallowed": "false",
         # restrictions category
+        # fuck whoever enabled this
+        "allowRemoteScreenObservation": "false",
         "allowAppInstallation": "true",
         "allowAppRemoval": "true",
         "allowInAppPurchases": "true",
@@ -54,11 +56,23 @@ class Config:
         "allowAirDrop": "true",
         "allowItunes": "true",
         "allowSafari": "true",
+        "allowChat": "true",
+        "allowGameCenter": "true",
+        "allowMusicService": "true",
+        "allowNews": "true",
+        "allowSystemAppRemoval": "true",
+        "allowManagedToWriteUnmanagedContacts": "true",
+        "allowUnmanagedToReadManagedContacts": "true",
+        "forceLimitAdTracking": "true",
+        "allowPairedWatch": "true",
         "forceWifiPowerOn": "false",
         "allowVPNCreation": "true",
         "allowEraseContentAndSettings": "true",
         "allowDeviceNameModification": "true",
+        "allowUIConfigurationProfileInstallation": "true",
         "allowUIAppInstallation": "true",
+        "allowExplicitContent": "true",
+        "allowBookstoreErotica": "true"
     }
 
     def __init__(self):
