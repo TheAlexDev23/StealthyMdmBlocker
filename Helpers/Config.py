@@ -47,8 +47,7 @@ class Config:
         # but due to the way the parser works it'll be fine.
         "PayloadRemovalDisallowed": "false",
         # restrictions category
-        # fuck whoever enabled this
-        "allowRemoteScreenObservation": "false",
+        "allowRemoteScreenObservation": "false",  # fuck whoever enabled this one
         "allowAppInstallation": "true",
         "allowAppRemoval": "true",
         "allowInAppPurchases": "true",
