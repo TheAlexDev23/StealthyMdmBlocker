@@ -12,6 +12,10 @@ executionEnvironments = [
     "./Helpers/",
     "~/.local/share/pipx/venvs/mitmproxy/",
   ] },
+  { root = "./RequestBlocking/", pythonVersion = "3.11", extraPaths = [
+    "./Helpers/",
+    "~/.local/share/pipx/venvs/mitmproxy/",
+  ] },
   { root = "./ProfileModification/", pythonVersion = "3.11", extraPaths = [
     "./Helpers/",
     "~/.local/share/pipx/venvs/mitmproxy/",
