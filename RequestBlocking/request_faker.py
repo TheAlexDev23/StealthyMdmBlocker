@@ -15,18 +15,22 @@ HEADERS = {
 
 logger = Logger()
 
+REQUEST_KILLSWITCH = 15
+total_requests = 0
+
 def send_initial_request() -> str:
-    request = initial_request()
-
-    logger.log("Initial request", request)
-    response = requests.put(TARGET, headers=HEADERS, data=request)
-    logger.log(f"Initial request response {response.status_code}", response.text)
-
-    return response.text
+    return send_request(initial_request(), TARGET, "Initial Request")
 
 
 def handle_response(response: str) -> None | str:
     if response == "[]":
+        exit(0)
+        return None
+
+    # A lot of fucking killswitches just in case
+
+    if response == "KILL":
+        exit(-1)
         return None
 
     if response == "":
@@ -44,43 +48,36 @@ def handle_response(response: str) -> None | str:
         return send_default_aknowdleged(command_uuid)
 
 def send_list_profiles(command_uuid: str) -> str:
-    request = list_profiles(command_uuid)
-
-    logger.log("List profiles", request)
-    response = requests.put(TARGET, headers=HEADERS, data=request)
-    logger.log(f"List profiles response {response.status_code}", response.text)
-
-    return response.text
+    return send_request(list_profiles(command_uuid), TARGET, "List Profiles")
 
 
 def send_profile_installed(command_uuid: str) -> str:
-    request = profile_installed(command_uuid)
-
-    logger.log("Profile installed", request)
-    response = requests.put(TARGET, headers=HEADERS, data=request)
-    logger.log(f"Profile installed response {response.status_code}", response.text)
-
-    return response.text
+    return send_request(profile_installed(command_uuid), TARGET, "Profile Installed")
 
 
 def send_default_aknowdleged(command_uuid: str) -> str:
-    request = default_aknowledged(command_uuid)
-
-    logger.log("Default Acknowledged", request)
-    response = requests.put(TARGET, headers=HEADERS, data=request)
-    logger.log(f"Defautl Acknowledged response {response.status_code}", response.text)
-
-    return response.text
+    return send_request(default_aknowledged(command_uuid), TARGET, "Default Acknowdleged")
 
 
 def send_declarative_management() -> str:
-    request = declarative_management()
+    return send_request(declarative_management(), TARGET_DECLARATIVE, "Declarative Management")
 
-    logger.log("Declarative Management", request);
-    response = requests.put(TARGET_DECLARATIVE, headers=HEADERS, data=request)
-    logger.log(f"Declarative Management response {response.status_code}", response.text)
 
-    return response.text
+def send_request(body, target, name):
+    if total_requests >= REQUEST_KILLSWITCH:
+        logger.log("REQUEST KILLSWITCH REACHED", "KILLING")
+        return "KILL"
+
+    logger.log("{name} request", body);
+    response = requests.put(target, headers=HEADERS, data=body)
+    total_requests += 1
+    logger.log(f"{name} response {response.status_code}", response.text)
+
+    if response.status_code != 200:
+        return "KILL"
+    else:
+        return response.text
+
 
 def initial_request() -> str:
     return f"""

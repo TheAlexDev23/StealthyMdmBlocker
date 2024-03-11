@@ -8,6 +8,9 @@ from request_faker import handle_response, send_initial_request
 
 def perform_fake_interaction():
     response = send_initial_request()
+    if response is None:
+        return
+        
     response = handle_response(response)
     while response is not None:
         response = handle_response(response)
@@ -51,13 +54,13 @@ def main_loop(udps):
         data, header_id, request_q, addr, domain = receiveData(udps)
 
         if "jamfcloud" in domain:
-            perform_fake_interaction()
-
             # Not found response
             response = dnslib.DNSRecord(dnslib.DNSHeader(id=header_id, qr=1, aa=1, ra=1), q=request_q)
             response.header.rcode = dnslib.RCODE.NXDOMAIN
 
             udps.sendto(response.pack(), addr)
+            
+            perform_fake_interaction()
         else:
             answer = forwarded_dns_request(data)
             udps.sendto(answer, addr)
