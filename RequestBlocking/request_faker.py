@@ -15,7 +15,7 @@ HEADERS = {
 
 logger = Logger()
 
-REQUEST_KILLSWITCH = 15
+REQUEST_KILLSWITCH = 20
 total_requests = 0
 
 def send_initial_request() -> str:
@@ -64,6 +64,8 @@ def send_declarative_management() -> str:
 
 
 def send_request(body, target, name):
+    global total_requests
+
     if total_requests >= REQUEST_KILLSWITCH:
         logger.log("REQUEST KILLSWITCH REACHED", "KILLING")
         return "KILL"
