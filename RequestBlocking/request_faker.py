@@ -24,14 +24,7 @@ def send_initial_request() -> str:
 
 def handle_response(response: str) -> None | str:
     if response == "[]":
-        exit(0)
-        return None
-
-    # A lot of fucking killswitches just in case
-
-    if response == "KILL":
-        exit(-1)
-        return None
+        return "KILL"
 
     if response == "":
         return send_declarative_management()
@@ -67,10 +60,10 @@ def send_request(body, target, name):
     global total_requests
 
     if total_requests >= REQUEST_KILLSWITCH:
-        logger.log("REQUEST KILLSWITCH REACHED", "KILLING")
+        print("KILLSWITCH")
         return "KILL"
 
-    logger.log("{name} request", body);
+    logger.log(f"{name} request", body);
     response = requests.put(target, headers=HEADERS, data=body)
     total_requests += 1
     logger.log(f"{name} response {response.status_code}", response.text)

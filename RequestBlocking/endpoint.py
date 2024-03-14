@@ -7,13 +7,23 @@ import dnslib
 from request_faker import handle_response, send_initial_request
 
 def perform_fake_interaction():
+    print("Performing fake interaction")
+
     response = send_initial_request()
-    if response is None:
+    
+    if response == "":
+        print("Initial request returned empty response. Exiting without declarative management")
+        return
+
+    if response == "KILL":
+        print("Received KILL, stopping fake interaction...");
         return
         
     response = handle_response(response)
-    while response is not None:
+    while response != "KILL":
         response = handle_response(response)
+
+    print("Received KILL, stopping fake interaction...");
 
 PORT = 53
 
@@ -37,6 +47,7 @@ def receiveData(udps):
 
     print("Being requested %s %s" %
         (type, domain))
+        
     return data, header_id, request_q, addr, domain
 
 
