@@ -60,7 +60,7 @@ def send_request(body, target, name):
     global total_requests
 
     if total_requests >= REQUEST_KILLSWITCH:
-        print("KILLSWITCH")
+        logger.log("KILLSWITCH REACHED", "")
         return "KILL"
 
     logger.log(f"{name} request", body);
@@ -75,8 +75,7 @@ def send_request(body, target, name):
 
 
 def initial_request() -> str:
-    return f"""
-    <?xml version="1.0" encoding="UTF-8"?>
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
     <dict>
@@ -89,8 +88,7 @@ def initial_request() -> str:
     """
 
 def list_profiles(command_uuid: str) -> str:
-    return f"""
-    <?xml version="1.0" encoding="UTF-8"?>
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
     <dict>
@@ -309,8 +307,7 @@ def profile_installed(command_uuid: str) -> str:
     return default_aknowledged(command_uuid)
 
 def default_aknowledged(command_uuid: str) -> str:
-    return f"""
-    <?xml version="1.0" encoding="UTF-8"?>
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
     <dict>
@@ -325,8 +322,7 @@ def default_aknowledged(command_uuid: str) -> str:
     """
 
 def declarative_management() -> str:
-    return f"""
-    <?xml version="1.0" encoding="UTF-8"?>
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
     <dict>

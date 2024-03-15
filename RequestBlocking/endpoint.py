@@ -5,25 +5,28 @@ import socket
 import dnslib
 
 from request_faker import handle_response, send_initial_request
+from Logger import Logger
+
+logger = Logger()
 
 def perform_fake_interaction():
-    print("Performing fake interaction")
+    logger.log("Performing fake interaction", "")
 
     response = send_initial_request()
     
     if response == "":
-        print("Initial request returned empty response. Exiting without declarative management")
+        logger.log("Initial request returned empty response. Exiting without declarative management", "")
         return
 
     if response == "KILL":
-        print("Received KILL, stopping fake interaction...");
+        logger.log("Received KILL", "stopping fake interaction...");
         return
         
     response = handle_response(response)
     while response != "KILL":
         response = handle_response(response)
 
-    print("Received KILL, stopping fake interaction...");
+    print("Received KILL", "stopping fake interaction... This is not necessary killswitch, it can also have been successful");
 
 PORT = 53
 
@@ -75,6 +78,7 @@ def main_loop(udps):
         else:
             answer = forwarded_dns_request(data)
             udps.sendto(answer, addr)
+            print("Forwarded")
 
 def init_listener():
     udps = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
