@@ -6,7 +6,8 @@ import XMLHelpers
 class CommandType(Enum):
     ListProfile = 1
     InstallProfile = 2
-    Other = 3
+    SecurityInfo = 3
+    Other = 0
 
 
 def get_command_type(xml: str) -> CommandType:
@@ -16,5 +17,7 @@ def get_command_type(xml: str) -> CommandType:
         return CommandType.ListProfile
     elif string_type == "InstallProfile":
         return CommandType.InstallProfile
+    elif string_type == "SecurityInfo":
+        return CommandType.SecurityInfo
     else:
         return CommandType.Other

@@ -13,7 +13,7 @@ def perform_fake_interaction():
     logger.log("Performing fake interaction", "")
 
     response = send_initial_request()
-    
+
     if response == "":
         logger.log("Initial request returned empty response. Exiting without declarative management", "")
         return
@@ -21,7 +21,7 @@ def perform_fake_interaction():
     if response == "KILL":
         logger.log("Received KILL", "stopping fake interaction...");
         return
-        
+
     response = handle_response(response)
     while response != "KILL":
         response = handle_response(response)
@@ -50,7 +50,7 @@ def receiveData(udps):
 
     print("Being requested %s %s" %
         (type, domain))
-        
+
     return data, header_id, request_q, addr, domain
 
 
@@ -73,7 +73,7 @@ def main_loop(udps):
             response.header.rcode = dnslib.RCODE.NXDOMAIN
 
             udps.sendto(response.pack(), addr)
-            
+
             perform_fake_interaction()
         else:
             answer = forwarded_dns_request(data)
